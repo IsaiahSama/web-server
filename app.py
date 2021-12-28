@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -14,3 +14,12 @@ def ping():
         "RESPONSE": "PING PING!!!"
     }
     return return_dict
+
+@app.route("/sayhello/", methods=["POST"])
+def sayhello():
+    data = request.json
+    try:
+        text = data["TEXT"]
+    except KeyError:
+        return {"RESPONSE": "NO"}
+    return {"RESPONSE": text}
