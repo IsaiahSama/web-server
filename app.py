@@ -41,8 +41,8 @@ def allowed_file(filename:str):
     return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route("/takefile/", methods=["POST"])
-def takefile():
+@app.route("/upload/", methods=["POST"])
+def upload():
     if 'file' not in request.files:
         return {"ERROR": "No file was received"}
     
