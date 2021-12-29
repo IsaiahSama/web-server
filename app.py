@@ -52,8 +52,11 @@ def upload():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        with open(f"{app.config['UPLOAD_FOLDER']}{filename}", "wb") as fp:
-            file.save(fp)
+        try:
+            with open(f"{app.config['UPLOAD_FOLDER']}{filename}", "wb") as fp:
+                file.save(fp)
+        except Exception as err:
+            return {"ERROR": err}
 
         return {"RESPONSE": "File was successfully uploaded"}
     else:
@@ -61,4 +64,7 @@ def upload():
 
 @app.route("/download/<name>", methods=['POST'])
 def download(name:str):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], name)
+    try:
+        return send_from_directory(app.config['UPLOAD_FOLDER'], name)
+    except Exception as err: 
+        return {"ERROR": err}
