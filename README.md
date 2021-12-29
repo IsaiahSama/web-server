@@ -12,7 +12,7 @@ Everything is for the sole purpose of storing data in an sqlite database.
 
 ## About
 This is the documentation for the API which will allow the bots to interact with the server which in turn will manipulate the database.
-All Requests and Responses will contain JSON with which will be used to communicate.
+All Responses will contain JSON with which will be used to communicate.
 
 ## Errors
 If any errors occur when interacting with the server, the following response will be returned.
@@ -24,3 +24,19 @@ If any errors occur when interacting with the server, the following response wil
 }
 ```
 ## Uploading a file
+The database can be uploaded using the following URL: `/upload/`
+
+Expected to be in the request must be a files kwarg, defined in the following way
+
+```json
+{
+    'file': "File buffer returned from open function"
+}
+```
+
+## Downloading a file
+The database can be downloaded by using the following URL: `/download/filename.extension`
+
+Where `filename` is the name of the file to be accessed.
+
+Will return text, which will contain the contents of the file
