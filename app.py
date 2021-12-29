@@ -56,7 +56,7 @@ def upload():
             with open(f"{app.config['UPLOAD_FOLDER']}{filename}", "wb") as fp:
                 file.save(fp)
         except Exception as err:
-            return {"ERROR": err}
+            return {"ERROR": str(err)}
 
         return {"RESPONSE": "File was successfully uploaded"}
     else:
@@ -67,4 +67,4 @@ def download(name:str):
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], name)
     except Exception as err: 
-        return {"ERROR": err}
+        return {"ERROR": str(err)}
