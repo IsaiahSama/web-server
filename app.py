@@ -2,7 +2,7 @@ from flask import Flask, request, send_from_directory
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'db/'
-ALLOWED_EXTENSIONS = ['sqlite3', 'txt']
+ALLOWED_EXTENSIONS = ['sqlite3']
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
