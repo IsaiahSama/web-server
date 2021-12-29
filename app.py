@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'db/'
@@ -58,3 +58,7 @@ def upload():
         return {"RESPONSE": "File was successfully uploaded"}
     else:
         return {"ERROR": "Invalid file provided"}
+
+@app.route("/download/<name>", methods=['POST'])
+def download(name:str):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], name)
