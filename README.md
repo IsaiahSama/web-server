@@ -30,7 +30,7 @@ Expected to be in the request must be a files kwarg, defined in the following wa
 
 ```json
 {
-    'file': "File buffer returned from open function"
+    "file": "File buffer returned from open function"
 }
 ```
 
