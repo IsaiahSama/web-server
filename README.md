@@ -23,6 +23,8 @@ Running on http://ipaddress:port/ (Press CTRL+C to quit)
 
 The URL that the server is hosted on, is the one link that says: http:// etc. Visiting that link on any device connected to the same internet as the server, will allow you to interact with the server, allowing you to Upload, Download and view files as you desire.
 
+All files uploaded to the server, will be stored in a folder called `uploads`. The name of this folder can be changed, as long as the variable itself is updated. 
+
 
 # API Documentation
 
