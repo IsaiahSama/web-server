@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 
-<h1>Hey there {% if name %} {{ name }} {% else %} <a href="/setname/">User</a> {% endif %} </h1>
+<h1>Hey there {% if session.name %} {{ session.name }} {% else %} <a href="/setname/">User</a> {% endif %} </h1>
 <p>Hello and welcome to your very own webserver😁 (designed by Isaiah Carrington. Perhaps check out some more of his stuff on his <a href="https://isaiahsama.github.io/">website</a>)</p>
 
 <p>I am well aware the website isn't anything fancy, but it is functional😉</p>
@@ -15,7 +15,7 @@
 <h2>File Upload</h2>
 <p>Ready to upload some files? Just press <a href="/upload/">here</a> to get started.</p>
 
-<h2>{% if name %} {{ name }}'s {% else %} Your {% endif %} Files</h2>
+<h2>{% if session.name %} {{ session.name }}'s {% else %} Your {% endif %} Files</h2>
 
 {% if files %}
 
@@ -23,5 +23,9 @@
 
 {% else %}
     <p>You haven't uploaded any files as yet. Do so by pressing the <a href="/upload/"> upload</a> link above</p>
+{% endif %}
+
+{% if session.name %}
+    <a href="/forgetme/">Forget I told you my name</a>
 {% endif %}
 {% endblock %}
