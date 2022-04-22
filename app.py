@@ -77,7 +77,7 @@ def forgetme():
         flash("I never knew you in the first place...", "danger")
     else:
         session.pop('name', None)
-        flash("F-Fine... Who are you again?", "error")
+        flash("F-Fine... Who are you again?", "danger")
     
     return redirect(url_for("index"))
 

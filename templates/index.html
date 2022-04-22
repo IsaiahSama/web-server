@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
-{% block head %}
-{{ super() }}
-{% endblock %}
 {% block content %}
 
 <h1>Hey there {% if session.name %} {{ session.name }} {% else %} <a href="/setname/">User</a> {% endif %} </h1>
