@@ -1,6 +1,5 @@
 try:
-    from flask import jsonify
-    from flask import Flask, request, send_from_directory, render_template
+    from flask import Flask, request, send_from_directory, render_template, flash, redirect, url_for, jsonify, session
     from werkzeug.utils import secure_filename
     from os.path import exists
     from os import mkdir
@@ -11,7 +10,7 @@ except ImportError as err:
     raise SystemExit
 
 v = sys.version_info
-if not (v.major is 3 and v.minor >= 10):
+if not (v.major == 3 and v.minor >= 10):
     print("This program requires Python version 3.10 or higher to function. Please update your version of python and try again.")
     input("Press enter to exit")
     raise SystemExit
@@ -25,6 +24,7 @@ if not exists(UPLOAD_FOLDER):
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = "default_secret_key"
 
 # Main
 
@@ -49,6 +49,37 @@ def sayhello():
     except KeyError:
         return {"RESPONSE": "NO"}
     return {"RESPONSE": text}
+
+@app.route("/setname/", methods=["POST", "GET"])
+def setname():
+    if request.method == 'GET':
+        return """
+        <h1> Who are you? </h1>
+        <p> Well, since you insist... My name is Isaiah. Tell me yours! </p>
+
+        <form method='post'>
+            <p><input type=text name=newname></p>
+            <p><input type=submit value=Yes></p>
+        </form>
+        """
+    
+    if not request.form or 'newname' not in request.form:
+        flash("Your seem to have not wanted to tell me your name. That's all right.", "warning")
+        return redirect(url_for("index"))
+
+    session['name'] = request.form['newname']
+    flash(f"Nice to meet you {session['name']}", "success")
+    return redirect(url_for('index'))
+
+@app.route("/forgetme/", methods=["GET"])
+def forgetme():
+    if 'name' not in session:
+        flash("I never knew you in the first place...", "danger")
+    else:
+        session.pop('name', None)
+        flash("F-Fine... Who are you again?", "error")
+    
+    return redirect(url_for("index"))
 
 # Using the API
 
