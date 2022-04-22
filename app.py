@@ -72,3 +72,8 @@ def download(name:str):
         return send_from_directory(app.config['UPLOAD_FOLDER'], name)
     except Exception as err: 
         return {"ERROR": str(err), "URL": "/download/"+name}
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404page.html")
