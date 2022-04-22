@@ -13,7 +13,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, world</p>"
+    return render_template('index.html')
 
 @app.route("/ping/", methods=["POST"])
 def ping():
@@ -45,7 +45,7 @@ def allowed_file(filename:str):
     # return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTENSIONS
     return True
 
-@app.route("/upload/", methods=["POST"])
+@app.route("/api/upload/", methods=["POST"])
 def upload():
     if 'file' not in request.files:
         return {"ERROR": "No file was received"}
@@ -66,7 +66,7 @@ def upload():
     else:
         return {"ERROR": "Invalid file provided", "URL": "/upload/"}
 
-@app.route("/download/<name>", methods=['POST'])
+@app.route("/api/download/<name>", methods=['POST'])
 def download(name:str):
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], name)

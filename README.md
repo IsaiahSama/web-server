@@ -45,7 +45,7 @@ If any errors occur when interacting with the server, the following response wil
 }
 ```
 ## Uploading a file
-The database can be uploaded using the following URL: `/upload/`
+Files can be uploaded using the following URL: `/api/upload/`
 
 Expected to be in the request must be a files kwarg, defined in the following way
 
@@ -87,7 +87,7 @@ exit()
 ```
 
 ## Downloading a file
-The database can be downloaded by using the following URL: `/download/filename.extension`
+The file can be downloaded by using the following URL: `/api/download/filename.extension`
 
 Where `filename` is the name of the file to be accessed.
 
