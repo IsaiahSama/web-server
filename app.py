@@ -1,8 +1,12 @@
-from flask import Flask, request, send_from_directory
-from werkzeug.utils import secure_filename
+try:
+    from flask import Flask, request, send_from_directory, render_template
+    from werkzeug.utils import secure_filename
+except ImportError as err:
+    print("You are missing some required packages. Run `pip install -r requirements.txt` in this current directory to install them.", err )
+    input("Press enter to close")
 
-UPLOAD_FOLDER = 'db/'
-ALLOWED_EXTENSIONS = ['sqlite3']
+UPLOAD_FOLDER = 'uploads/'
+# ALLOWED_EXTENSIONS = ['sqlite3', 'txt', 'py']
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -38,8 +42,8 @@ def allowed_file(filename:str):
     Returns:
         bool"""
 
-    return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTENSIONS
-
+    # return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTENSIONS
+    return True
 
 @app.route("/upload/", methods=["POST"])
 def upload():
@@ -60,11 +64,11 @@ def upload():
 
         return {"RESPONSE": "File was successfully uploaded"}
     else:
-        return {"ERROR": "Invalid file provided"}
+        return {"ERROR": "Invalid file provided", "URL": "/upload/"}
 
 @app.route("/download/<name>", methods=['POST'])
 def download(name:str):
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], name)
     except Exception as err: 
-        return {"ERROR": str(err)}
+        return {"ERROR": str(err), "URL": "/download/"+name}
