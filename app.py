@@ -118,7 +118,7 @@ def upload_file(overwrite=False):
         file.save(join(app.config['UPLOAD_FOLDER'], filename))
         mydb.add_entry(filename)
         flash("Uploaded successfully.", "success")
-        return redirect(url_for('index'))
+        return redirect(request.url)
     else:
         flash("Filename must not contain spaces. Apologies.", "warning")
         return redirect(request.url)
