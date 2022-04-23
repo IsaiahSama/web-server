@@ -5,12 +5,18 @@
 <h1>Hey there {% if session.name %} {{ session.name }} {% else %} <a href="/setname/">User</a> {% endif %} </h1>
 <p>Hello and welcome to your very own webserver😁 (designed by Isaiah Carrington. Perhaps check out some more of his stuff on his <a href="https://isaiahsama.github.io/">website</a>)</p>
 
-<p>I am well aware the website isn't anything fancy, but it is functional😉</p>
+<p>I am well aware the website doesn't look very fancy, but it is functional😉!</p>
 
 <p>Since you're here, I assume that you know what this is and the general idea of what you're capable of doing here. Awesome. Everything can be accessed from below</p>
 
+<hr>
+
 <h2>File Upload</h2>
 <p>Ready to upload some files? Just press <a href="/upload/">here</a> to get started.</p>
+<p>Or... you know... The big upload button beneath me works as well 😅</p>
+<a href="/upload/"><button class="btn btn-primary">Upload a file</button></a>
+
+<hr>
 
 <h2>{% if session.name %} {{ session.name }}'s {% else %} Your {% endif %} Files</h2>
 
@@ -22,6 +28,7 @@
     <p>You haven't uploaded any files as yet. Do so by pressing the <a href="/upload/"> upload</a> link above</p>
 {% endif %}
 
+<hr>
 {% if session.name %}
     <a href="/forgetme/">Forget I told you my name</a>
 {% endif %}

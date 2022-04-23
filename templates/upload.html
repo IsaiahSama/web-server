@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Upload A File {% endblock %}
+
+{% block content %}
+
+<h1>Upload File Here</h1>
+<p>So you're finally ready to upload a file. Well then, just click the button below to get started!</p>
+
+{% if overwrite %}
+    <form action="/upload/overwrite/" method="post" enctype="multipart/form-data">
+    <p><strong>NOTE: This form is in overwrite mode. Any existing file with the same name as the one you are going to enter below, will be overwritten.</strong></p>
+{% else %}
+    <form action="/upload/" method="post" enctype="multipart/form-data">
+{% endif %}
+    <div class="mb-3">
+    <input type="file" name="file" class="form-control">
+    </div>
+    <input type="submit" value="Upload" class="btn-primary">
+
+</form>
+<br><br>
+<p>Finished and ready to go home? Well just press the big green button below!</p>
+<a href="/"><button class="btn btn-success">HOME</button></a>
+
+{% endblock %}
