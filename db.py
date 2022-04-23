@@ -90,7 +90,7 @@ class Database:
             if downloaded:
                 cursor = db.execute("SELECT download_count FROM MetaTable WHERE filename = ?", (filename, ))
                 row = cursor.fetchone()
-                db.execute("UPDATE MetaTable SET last_downloaded = datetime('now'), download_count = ? WHERE filename = ?", (row[0], filename))
+                db.execute("UPDATE MetaTable SET last_downloaded = datetime('now'), download_count = ? WHERE filename = ?", (row[0] + 1, filename))
             else:
                 db.execute("DELETE FROM MetaTable WHERE filename = ?", (filename, ))
             db.commit()
