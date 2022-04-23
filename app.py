@@ -120,7 +120,7 @@ def upload_file(overwrite=False):
         flash("Uploaded successfully.", "success")
         return redirect(request.url)
     else:
-        flash("Filename must not contain spaces. Apologies.", "warning")
+        flash("Filename must not contain spaces. Apologies.", "danger")
         return redirect(request.url)
 
 @app.route('/download/<filename>')
