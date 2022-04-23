@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %} 500 - Application Error {% endblock %}
+
+{% block content %}
+
+<h1>An error has occurred</h1>
+
+<p>Hello? Is this thing on?</p>
+<p>Ah yes... why hello there {% if session.name %} {{session.name}} {% else %} User {% endif %}. Sorry you had to see back here 😅🙏.</p>
+<p>Seems like an internal error has occurred within the application. I don't think you are at fault... maybe...</p>
+<p>Anyway, enough chitchat. Here's the error. <br> {{error}}</p>
+<p>Feel free to email Isaiah at icarrington46@gmail.com with a screenshot of the error from the Terminal if it keeps ocurring. Again... I'm very sorry you've had to see this side of me.</p>
+<p>Here you go, a free trip back to the home page!</p>
+
+<a href="/"><button class="btn btn-secondary">Home</button></a>
+
+{% endblock %}

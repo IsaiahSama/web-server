@@ -209,3 +209,7 @@ def verify_file(filename:str):
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("404page.html")
+
+@app.errorhandler(500)
+def application_error(error):
+    return render_template("500page.html", error=error)
