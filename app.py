@@ -11,13 +11,13 @@ try:
     from werkzeug.utils import secure_filename
     from os.path import exists, join
     from os import mkdir, remove
+    from constants import UPLOAD_FOLDER
 except ImportError as err:
     print("You are missing some required packages. Run `pip install -r requirements.txt` in this current directory to install them.", err )
     input("Press enter to close")
     raise SystemExit
 
 
-UPLOAD_FOLDER = "uploads"
 UPLOAD_FOLDER += '/'
 
 if not exists(UPLOAD_FOLDER):
@@ -34,6 +34,7 @@ mydb = db.Database()
 
 @app.route("/")
 def index():
+    mydb.check_entries()
     files = mydb.get_entries()
     return render_template('index.html', files=files)
 
@@ -96,14 +97,14 @@ def upload_file(overwrite=False):
     
     if 'file' not in request.files:
         flash("No file was detected.", "warning")
-        return redirect(request.url)
+        return redirect(url_for("upload_file"))
     
     file = request.files['file']
 
     if not file.filename:
         flash("No file was selected", "danger")
-        return redirect(request.url)
-    
+        return redirect(url_for("upload_file"))
+
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         # Here we make sure the file passes all other checks
@@ -119,18 +120,27 @@ def upload_file(overwrite=False):
         file.save(join(app.config['UPLOAD_FOLDER'], filename))
         mydb.add_entry(filename)
         flash("Uploaded successfully.", "success")
-        return redirect(request.url)
+        return redirect(url_for("upload_file"))
     else:
         flash("Filename must not contain spaces. Apologies.", "danger")
-        return redirect(request.url)
+        return redirect(url_for("upload_file"))
 
-@app.route('/download/<filename>')
+@app.route('/view/<filename>')
+def view_file(filename):
+    if not exists(join(app.config['UPLOAD_FOLDER'], filename)):
+        flash("No such file exists on the server.", "danger")
+        return redirect(url_for("index"))
+    if not mydb.get_entry(filename):
+        mydb.add_entry(filename)
+    mydb.update_entry(filename, False)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route("/download/<filename>")
 def download_file(filename):
     if not exists(join(app.config['UPLOAD_FOLDER'], filename)):
         flash("No such file exists on the server.", "danger")
         return redirect(url_for("index"))
     if not mydb.get_entry(filename):
-        # flash("Note: No metadata exists for this file. Will create now.", "warning")
         mydb.add_entry(filename)
     mydb.update_entry(filename)
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
