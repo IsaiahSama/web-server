@@ -38,6 +38,7 @@
     </thead>
     <tbody>
         {% for row in files %}
+        <tr>
         <th scope="row">{{ row[0] }} </th>
         <td> {{ row[1] }} </td>
         <td> {{ row[2] }} GMT </td>
@@ -45,6 +46,7 @@
         <td> {{ row[4] }} </td>
         <td> <a href="/download/{{row[1]}}"><button class="btn btn-primary">Download</button></a> </td>
         <td> <a href="/delete/{{row[1]}}"><button class="btn btn-danger">Delete</button></a> </td>
+        </tr>
         {% endfor %}
     </tbody>
 </table>
