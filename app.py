@@ -1,9 +1,10 @@
 try:
+    import db
+    import sys
     from flask import Flask, request, send_from_directory, render_template, flash, redirect, url_for, jsonify, session
     from werkzeug.utils import secure_filename
-    from os.path import exists
-    from os import mkdir
-    import sys
+    from os.path import exists, join
+    from os import mkdir, remove
 except ImportError as err:
     print("You are missing some required packages. Run `pip install -r requirements.txt` in this current directory to install them.", err )
     input("Press enter to close")
@@ -26,11 +27,14 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "default_secret_key"
 
+mydb = db.Database()
+
 # Main
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    files = mydb.get_entries()
+    return render_template('index.html', files=files)
 
 @app.route("/ping/", methods=["POST"])
 def ping():
@@ -81,6 +85,68 @@ def forgetme():
     
     return redirect(url_for("index"))
 
+# The actual relevant part
+
+@app.route('/upload/', methods=['GET', "POST"])
+@app.route('/upload/<overwrite>/', methods=["POST"])
+def upload_file(overwrite=False):
+    if request.method == 'GET':
+        return render_template("upload.html", overwrite=overwrite)
+    
+    if 'file' not in request.files:
+        flash("No file was detected.", "warning")
+        return redirect(request.url)
+    
+    file = request.files['file']
+
+    if not file.filename:
+        flash("No file was selected", "danger")
+        return redirect(request.url)
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # Here we make sure the file passes all other checks
+        try:
+            verify_file(filename)
+        except FileExistsError:
+            if not overwrite:
+                flash("The file already exists. If you would like to overwrite it, press the button below", "danger")
+                return render_template("upload.html", overwrite=True)
+            else:
+                flash("Overwriting existing file.", "warning")
+                remove(join(app.config["UPLOAD_FOLDER"], filename))
+        file.save(join(app.config['UPLOAD_FOLDER'], filename))
+        mydb.add_entry(filename)
+        flash("Uploaded successfully.", "success")
+        return redirect(url_for('index'))
+    else:
+        flash("Filename must not contain spaces. Apologies.", "warning")
+        return redirect(request.url)
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    if not exists(join(app.config['UPLOAD_FOLDER'], filename)):
+        flash("No such file exists on the server.", "danger")
+        return redirect(url_for("index"))
+    if not mydb.get_entry(filename):
+        # flash("Note: No metadata exists for this file. Will create now.", "warning")
+        mydb.add_entry(filename)
+    mydb.update_entry(filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route("/delete/<filename>")
+def delete_file(filename):
+    filepath = join(app.config["UPLOAD_FOLDER"], filename)
+    if exists(filepath):
+        remove(filepath)
+        flash("File removed successfully", "success")
+    else:
+        flash("No such file exists.", "warning")
+    if mydb.get_entry(filename):
+        mydb.update_entry(filename, False)
+        # flash("Removed entry from database.", "success")
+    return redirect(url_for("index"))
+
 # Using the API
 
 @app.route("/api/upload/", methods=["POST"])
@@ -113,7 +179,7 @@ def download(name:str):
 
 # Extra
 def allowed_file(filename:str):
-    """Determines whether an uploaded file is allowed or not
+    """Determines whether an uploaded file has a valid name.
     
     Args:
         filename (str): The name of the file to check
@@ -123,6 +189,20 @@ def allowed_file(filename:str):
 
     # return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTENSIONS
     return ' ' not in filename
+
+def verify_file(filename:str):
+    """Determines whether a file is valid or not
+    
+    Args:
+        filename (str): The name of the file to check.
+        
+    Raises:
+        FileExistsError"""
+
+    full_path = join(app.config["UPLOAD_FOLDER"], filename)
+    if exists(full_path):
+        raise FileExistsError
+    
 
 
 # Error Handlers
