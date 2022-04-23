@@ -16,6 +16,9 @@
     <input type="file" name="file" class="form-control">
     </div>
     <input type="submit" value="Upload" class="btn-primary">
+{% if overwrite %}
+    <input type="submit" value="OVERWRITE!!!" class="btn-warning">
+{% endif %}
 
 </form>
 <br><br>
