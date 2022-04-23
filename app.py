@@ -1,3 +1,9 @@
+v = sys.version_info
+if not (v.major == 3 and v.minor >= 10):
+    print("This program requires Python version 3.10 or higher to function. Please update your version of python and try again.")
+    input("Press enter to exit")
+    raise SystemExit
+    
 try:
     import db
     import sys
@@ -10,11 +16,6 @@ except ImportError as err:
     input("Press enter to close")
     raise SystemExit
 
-v = sys.version_info
-if not (v.major == 3 and v.minor >= 10):
-    print("This program requires Python version 3.10 or higher to function. Please update your version of python and try again.")
-    input("Press enter to exit")
-    raise SystemExit
 
 UPLOAD_FOLDER = "uploads"
 UPLOAD_FOLDER += '/'
