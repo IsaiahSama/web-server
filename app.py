@@ -1,12 +1,12 @@
+import sys
 v = sys.version_info
 if not (v.major == 3 and v.minor >= 10):
     print("This program requires Python version 3.10 or higher to function. Please update your version of python and try again.")
     input("Press enter to exit")
     raise SystemExit
-    
+
 try:
     import db
-    import sys
     from flask import Flask, request, send_from_directory, render_template, flash, redirect, url_for, jsonify, session
     from werkzeug.utils import secure_filename
     from os.path import exists, join
