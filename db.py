@@ -86,7 +86,7 @@ class Database:
             filename (str): The name of the file to update.
             downloaded(bool): Whether the file was downloaded or not."""
 
-        with open(self.DB_NAME) as db:
+        with connect(self.DB_NAME) as db:
             if downloaded:
                 cursor = db.execute("SELECT download_count FROM MetaTable WHERE filename = ?", (filename, ))
                 row = cursor.fetchone()
