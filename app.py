@@ -122,7 +122,7 @@ def upload_file(overwrite=False):
         flash("Uploaded successfully.", "success")
         return redirect(url_for("upload_file"))
     else:
-        flash("Filename must not contain spaces. Apologies.", "danger")
+        flash("Filename must not be larger than 254 characters. Apologies.", "danger")
         return redirect(url_for("upload_file"))
 
 @app.route('/view/<filename>')
@@ -179,7 +179,7 @@ def upload():
 
         return {"RESPONSE": "File was successfully uploaded"}
     else:
-        return {"ERROR": "Invalid file provided. Filenames must not contain spaces", "URL": "/upload/"}
+        return {"ERROR": "Invalid file provided. Filenames must not be longer than 254 characters", "URL": "/upload/"}
 
 @app.route("/api/download/<name>", methods=['POST'])
 def download(name:str):
@@ -199,7 +199,7 @@ def allowed_file(filename:str):
         bool"""
 
     # return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTENSIONS
-    return ' ' not in filename
+    return len(filename) < 255
 
 def verify_file(filename:str):
     """Determines whether a file is valid or not
